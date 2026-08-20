@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Dashboard Ejecutivo - Cacao & Co</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+body{font-family:Segoe UI,Arial;background:#f7f5f2;margin:0}
+.header{background:#2b1d12;color:white;padding:20px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:15px}
+.card{background:white;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.1);padding:15px}
+.kpi{font-size:24px;font-weight:bold;color:#5a3418}
+.full{grid-column:span 2}
+h3{margin-top:0;color:#5a3418}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Dashboard Estratégico para Junta Directiva - Cacao & Co</h1>
+<p>Rentabilidad, descuentos, logística, comportamiento del consumidor y analítica predictiva</p>
+</div>
+
+<div class="grid">
+<div class="card"><h3>Producto más vendido</h3><div class="kpi">Barra Sal Marina</div></div>
+<div class="card"><h3>Ciudad más rentable</h3><div class="kpi">Bogota</div></div>
+<div class="card"><h3>% pedidos con descuento</h3><div class="kpi">40.0%</div></div>
+
+<div class="card"><div id="g1"></div></div>
+<div class="card"><div id="g2"></div></div>
+<div class="card"><div id="g3"></div></div>
+
+<div class="card full"><div id="g4"></div></div>
+<div class="card"><div id="g5"></div></div>
+
+<div class="card full">
+<h3>Motor de IA y Predicción</h3>
+<p>Predicción basada en tendencia móvil de rentabilidad histórica por hora.</p>
+<div id="pred"></div>
+</div>
+</div>
+
+<script>
+var gananciaProd = [{"producto":"Trufas Maracuya","ganancia":240000},{"producto":"Barra Sal Marina","ganancia":210000},{"producto":"Chocolate Blanco Cafe","ganancia":168000},{"producto":"Chocolate Amargo 80%","ganancia":126000}];
+Plotly.newPlot('g1',[{x:gananciaProd.map(x=>x.producto),y:gananciaProd.map(x=>x.ganancia),type:'bar'}],
+{title:'1. ¿Dónde está el dinero real?'});
+
+var boxData = [{"tiene_descuento": "No", "ganancia": 35000}, {"tiene_descuento": "Si", "ganancia": 80000}, {"tiene_descuento": "No", "ganancia": 18000}, {"tiene_descuento": "Si", "ganancia": 84000}, {"tiene_descuento": "No", "ganancia": 24000}, {"tiene_descuento": "Si", "ganancia": 64000}, {"tiene_descuento": "No", "ganancia": 9000}, {"tiene_descuento": "No", "ganancia": 48000}, {"tiene_descuento": "No", "ganancia": 28000}, {"tiene_descuento": "Si", "ganancia": 120000}, {"tiene_descuento": "No", "ganancia": 45000}, {"tiene_descuento": "No", "ganancia": 56000}, {"tiene_descuento": "Si", "ganancia": 63000}, {"tiene_descuento": "No", "ganancia": 16000}, {"tiene_descuento": "Si", "ganancia": 54000}];
+var si = boxData.filter(x=>x.tiene_descuento==='Si').map(x=>x.ganancia);
+var no = boxData.filter(x=>x.tiene_descuento==='No').map(x=>x.ganancia);
+Plotly.newPlot('g2',[{y:no,type:'box',name:'Regular'},{y:si,type:'box',name:'Descuento'}],
+{title:'2. Efecto Promoción'});
+
+var ciudad = [{"ciudad":"Bogota","cantidad":37},{"ciudad":"Cali","cantidad":25},{"ciudad":"Medellin","cantidad":33}];
+Plotly.newPlot('g3',[{x:ciudad.map(x=>x.cantidad),y:ciudad.map(x=>x.ciudad),orientation:'h',type:'bar'}],
+{title:'3. Volumen por Ciudad'});
+
+var hora = [{"hora_num":9,"canal_venta":"Presencial","ganancia":9000},{"hora_num":10,"canal_venta":"Presencial","ganancia":18000},{"hora_num":11,"canal_venta":"Presencial","ganancia":111000},{"hora_num":12,"canal_venta":"Web","ganancia":28000},{"hora_num":13,"canal_venta":"Web","ganancia":16000},{"hora_num":14,"canal_venta":"Web","ganancia":91000},{"hora_num":15,"canal_venta":"Web","ganancia":24000},{"hora_num":16,"canal_venta":"Web","ganancia":64000},{"hora_num":17,"canal_venta":"Presencial","ganancia":120000},{"hora_num":18,"canal_venta":"Presencial","ganancia":80000},{"hora_num":19,"canal_venta":"Web","ganancia":138000},{"hora_num":20,"canal_venta":"Web","ganancia":45000}];
+var canales=[...new Set(hora.map(x=>x.canal_venta))];
+var traces=canales.map(c=>({
+ x:hora.filter(r=>r.canal_venta===c).map(r=>r.hora_num),
+ y:hora.filter(r=>r.canal_venta===c).map(r=>r.ganancia),
+ mode:'lines+markers',name:c
+}));
+Plotly.newPlot('g4',traces,{title:'4. Hora Pico del Chocolate'});
+
+Plotly.newPlot('g5',[{
+values:[40.0,60.0],
+labels:['Con descuento','Sin descuento'],
+type:'pie'
+}],{title:'Mix Comercial'});
+
+var pred=[{"hora_num":9,"ganancia":9000,"prediccion_proxima":9000.0},{"hora_num":10,"ganancia":18000,"prediccion_proxima":13500.0},{"hora_num":11,"ganancia":111000,"prediccion_proxima":46000.0},{"hora_num":12,"ganancia":28000,"prediccion_proxima":52333.3333333333},{"hora_num":13,"ganancia":16000,"prediccion_proxima":51666.6666666667},{"hora_num":14,"ganancia":91000,"prediccion_proxima":45000.0},{"hora_num":15,"ganancia":24000,"prediccion_proxima":43666.6666666667},{"hora_num":16,"ganancia":64000,"prediccion_proxima":59666.6666666667},{"hora_num":17,"ganancia":120000,"prediccion_proxima":69333.3333333333},{"hora_num":18,"ganancia":80000,"prediccion_proxima":88000.0},{"hora_num":19,"ganancia":138000,"prediccion_proxima":112666.6666666667},{"hora_num":20,"ganancia":45000,"prediccion_proxima":87666.6666666667}];
+Plotly.newPlot('pred',[
+{x:pred.map(x=>x.hora_num),y:pred.map(x=>x.ganancia),mode:'lines+markers',name:'Real'},
+{x:pred.map(x=>x.hora_num),y:pred.map(x=>x.prediccion_proxima),mode:'lines+markers',name:'Predicción'}
+],{title:'IA - Tendencia y Predicción de Ganancia'});
+</script>
+</body>
+</html>
