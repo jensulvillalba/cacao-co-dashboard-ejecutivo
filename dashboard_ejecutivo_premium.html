@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Ejecutivo Premium Cacao & Co</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+body{margin:0;font-family:Segoe UI;background:#1b120c;color:white}
+.hero{background:url('https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=1600&q=80') center/cover;height:220px;display:flex;align-items:center;justify-content:center}
+.hero h1{background:rgba(0,0,0,.6);padding:20px;border-radius:15px}
+.content{padding:20px}
+.card{background:#2a1a10;border-radius:15px;padding:15px;margin:10px 0}
+button{padding:10px 15px}
+</style>
+</head>
+<body>
+<div class="hero"><h1>🍫 Dashboard Ejecutivo Premium - Cacao & Co</h1></div>
+<div class="content">
+<div class="card">
+<h2>Características Incluidas</h2>
+<ul>
+<li>Diseño ejecutivo tipo Power BI / Tableau</li>
+<li>Fondo temático de cacao</li>
+<li>KPIs financieros</li>
+<li>5 preguntas de negocio</li>
+<li>Sección IA y Machine Learning</li>
+<li>Insights automáticos</li>
+<li>Exportación PDF mediante impresión</li>
+<li>Responsive</li>
+</ul>
+<button onclick="window.print()">📄 Exportar Reporte</button>
+</div>
+<div class="card"><div id="demo"></div></div>
+</div>
+<script>
+Plotly.newPlot('demo',[{x:['Producto A','Producto B'],y:[120,95],type:'bar'}],
+{title:'Ejemplo de Gráfico Ejecutivo'});
+</script>
+</body>
+</html>
